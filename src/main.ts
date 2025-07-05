@@ -57,6 +57,7 @@ app.get("/", (req: Request, res: Response) => {
 app.get("/data/:id", (req: Request, res: Response) => {
   const id: string = req.params.id;
   const item: DataItem | undefined = data.find((item) => item.id === id);
+
   if (item) {
     const copy: DataResponse = {
       id: item.id,

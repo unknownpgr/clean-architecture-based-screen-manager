@@ -63,13 +63,20 @@
 
     .connection-form {
       background: #f8f9fa;
-      padding: 25px;
-      border-radius: 10px;
+      padding: 30px;
+      border-radius: 15px;
       margin-bottom: 30px;
     }
 
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr auto;
+      gap: 20px;
+      align-items: end;
+    }
+
     .form-group {
-      margin-bottom: 20px;
+      margin-bottom: 0;
     }
 
     .form-group label {
@@ -79,7 +86,6 @@
       color: #333;
     }
 
-    .form-group input,
     .form-group select {
       width: 100%;
       padding: 12px;
@@ -87,9 +93,9 @@
       border-radius: 8px;
       font-size: 16px;
       transition: border-color 0.3s ease;
+      background: white;
     }
 
-    .form-group input:focus,
     .form-group select:focus {
       outline: none;
       border-color: #667eea;
@@ -104,104 +110,82 @@
       font-size: 16px;
       font-weight: 600;
       cursor: pointer;
-      transition: transform 0.2s ease;
+      transition: all 0.3s ease;
     }
 
     .btn:hover {
       transform: translateY(-2px);
-    }
-
-    .btn:active {
-      transform: translateY(0);
-    }
-
-    .connections-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 20px;
-      margin-top: 20px;
-    }
-
-    .connection-card {
-      background: white;
-      border: 2px solid #e1e5e9;
-      border-radius: 10px;
-      padding: 20px;
-      transition: all 0.3s ease;
-    }
-
-    .connection-card:hover {
-      border-color: #667eea;
-      box-shadow: 0 10px 25px rgba(102, 126, 234, 0.1);
-    }
-
-    .connection-card.connected {
-      border-color: #28a745;
-      background: linear-gradient(135deg, #f8fff9 0%, #e8f5e8 100%);
-    }
-
-    .connection-card.disconnected {
-      border-color: #dc3545;
-      background: linear-gradient(135deg, #fff8f8 0%, #ffe8e8 100%);
-    }
-
-    .card-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 15px;
-    }
-
-    .screen-id {
-      font-weight: 600;
-      font-size: 1.1rem;
-      color: #333;
-    }
-
-    .status {
-      padding: 4px 12px;
-      border-radius: 20px;
-      font-size: 0.8rem;
-      font-weight: 600;
-    }
-
-    .status.connected {
-      background: #28a745;
-      color: white;
-    }
-
-    .status.disconnected {
-      background: #dc3545;
-      color: white;
-    }
-
-    .data-id {
-      color: #666;
-      font-size: 0.9rem;
-    }
-
-    .action-buttons {
-      margin-top: 15px;
-      display: flex;
-      gap: 10px;
-    }
-
-    .btn-small {
-      padding: 8px 16px;
-      font-size: 14px;
+      box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
     }
 
     .btn-danger {
       background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
     }
 
-    .btn-success {
-      background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+    .btn-danger:hover {
+      box-shadow: 0 8px 20px rgba(220, 53, 69, 0.3);
     }
 
-    .refresh-btn {
-      background: linear-gradient(135deg, #17a2b8 0%, #20c997 100%);
-      margin-bottom: 20px;
+    .connections-list {
+      background: #f8f9fa;
+      padding: 30px;
+      border-radius: 15px;
+    }
+
+    .connection-item {
+      background: white;
+      border: 2px solid #e1e5e9;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 15px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: all 0.3s ease;
+    }
+
+    .connection-item:hover {
+      border-color: #667eea;
+      box-shadow: 0 5px 15px rgba(102, 126, 234, 0.1);
+    }
+
+    .connection-info {
+      flex: 1;
+    }
+
+    .connection-title {
+      font-weight: 600;
+      font-size: 1.1rem;
+      color: #333;
+      margin-bottom: 5px;
+    }
+
+    .connection-details {
+      color: #666;
+      font-size: 0.9rem;
+    }
+
+    .connection-status {
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      margin-right: 15px;
+    }
+
+    .status-connected {
+      background: #28a745;
+      color: white;
+    }
+
+    .no-connections {
+      text-align: center;
+      color: #666;
+      font-style: italic;
+      padding: 40px;
+      background: white;
+      border-radius: 10px;
+      border: 2px dashed #e1e5e9;
     }
 
     .loading {
@@ -227,6 +211,64 @@
       margin-bottom: 20px;
       border: 1px solid #c3e6cb;
     }
+
+    .navigation {
+      display: flex;
+      gap: 15px;
+      justify-content: center;
+      margin-top: 30px;
+    }
+
+    .nav-btn {
+      background: linear-gradient(135deg, #17a2b8 0%, #20c997 100%);
+      color: white;
+      border: none;
+      padding: 12px 25px;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-block;
+      transition: transform 0.2s ease;
+    }
+
+    .nav-btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .stat-card {
+      background: white;
+      padding: 20px;
+      border-radius: 12px;
+      text-align: center;
+      border: 2px solid #e1e5e9;
+      transition: all 0.3s ease;
+    }
+
+    .stat-card:hover {
+      border-color: #667eea;
+      box-shadow: 0 5px 15px rgba(102, 126, 234, 0.1);
+    }
+
+    .stat-value {
+      font-size: 2rem;
+      font-weight: bold;
+      color: #667eea;
+      margin-bottom: 5px;
+    }
+
+    .stat-label {
+      color: #666;
+      font-size: 0.9rem;
+    }
   </style>
 </head>
 
@@ -234,39 +276,64 @@
   <div class="container">
     <div class="header">
       <h1>🔗 Connection Manager</h1>
-      <p>Manage screen connections and data mappings</p>
+      <p>Manage screen and data source connections</p>
     </div>
 
     <div class="content">
-      <!-- Connection Form -->
+      <!-- Statistics -->
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-value" id="totalConnections">0</div>
+          <div class="stat-label">Total Connections</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="activeScreens">0</div>
+          <div class="stat-label">Active Screens</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value" id="connectedDataSources">0</div>
+          <div class="stat-label">Connected Data Sources</div>
+        </div>
+      </div>
+
+      <!-- Create Connection Section -->
       <div class="section">
         <h2>➕ Create New Connection</h2>
         <div class="connection-form">
-          <div class="form-group">
-            <label for="screenId">Screen ID:</label>
-            <input type="text" id="screenId" placeholder="Enter screen ID (e.g., screen1)">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="screenSelect">Screen:</label>
+              <select id="screenSelect">
+                <option value="">Select a screen...</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="dataSourceSelect">Data Source:</label>
+              <select id="dataSourceSelect">
+                <option value="">Select a data source...</option>
+                <option value="d1">Data Source 1 (d1)</option>
+                <option value="d2">Data Source 2 (d2)</option>
+                <option value="d3">Data Source 3 (d3)</option>
+              </select>
+            </div>
+            <button class="btn" onclick="createConnection()">Connect</button>
           </div>
-          <div class="form-group">
-            <label for="dataId">Data ID:</label>
-            <select id="dataId">
-              <option value="">Select data source</option>
-              <option value="d1">Data 1 (d1)</option>
-              <option value="d2">Data 2 (d2)</option>
-              <option value="d3">Data 3 (d3)</option>
-            </select>
-          </div>
-          <button class="btn" onclick="createConnection()">Create Connection</button>
         </div>
       </div>
 
       <!-- Current Connections -->
       <div class="section">
-        <div style="display: flex; justify-content: space-between; align-items: center;">
-          <h2>📊 Current Connections</h2>
+        <h2>📊 Current Connections</h2>
+        <div class="connections-list">
+          <div id="connectionsContainer">
+            <div class="loading">Loading connections...</div>
+          </div>
         </div>
-        <div id="connectionsContainer">
-          <div class="loading">Loading connections...</div>
-        </div>
+      </div>
+
+      <!-- Navigation -->
+      <div class="navigation">
+        <a href="/" class="nav-btn">🏠 Back to Home</a>
       </div>
     </div>
   </div>
@@ -274,9 +341,10 @@
   <script>
     const API_BASE = 'http://localhost:3000';
 
-    // Load connections on page load
+    // Load data on page load and start polling
     document.addEventListener('DOMContentLoaded', () => {
       loadConnections();
+      loadScreens();
       setInterval(loadConnections, 1000); // 1초마다 폴링
     });
 
@@ -285,8 +353,35 @@
         const response = await fetch(`${API_BASE}/connections`);
         const connections = await response.json();
         displayConnections(connections);
+        updateStats(connections);
       } catch (error) {
         showError('Failed to load connections: ' + error.message);
+      }
+    }
+
+    async function loadScreens() {
+      try {
+        const response = await fetch(`${API_BASE}/connections`);
+        const connections = await response.json();
+
+        const screenSelect = document.getElementById('screenSelect');
+        screenSelect.innerHTML = '<option value="">Select a screen...</option>';
+
+        // Add existing screens
+        Object.keys(connections).forEach(screenId => {
+          const option = document.createElement('option');
+          option.value = screenId;
+          option.textContent = `Screen: ${screenId}`;
+          screenSelect.appendChild(option);
+        });
+
+        // Add option to create new screen
+        const newOption = document.createElement('option');
+        newOption.value = 'new';
+        newOption.textContent = '+ Create New Screen';
+        screenSelect.appendChild(newOption);
+      } catch (error) {
+        console.error('Failed to load screens:', error);
       }
     }
 
@@ -294,77 +389,97 @@
       const container = document.getElementById('connectionsContainer');
 
       if (Object.keys(connections).length === 0) {
-        container.innerHTML = '<div class="loading">No connections found</div>';
+        container.innerHTML = '<div class="no-connections">No connections found</div>';
         return;
       }
 
-      const connectionsGrid = document.createElement('div');
-      connectionsGrid.className = 'connections-grid';
+      const connectionsList = document.createElement('div');
 
       Object.entries(connections).forEach(([screenId, dataId]) => {
-        const card = createConnectionCard(screenId, dataId);
-        connectionsGrid.appendChild(card);
+        if (dataId && dataId !== 'null') {
+          const connectionItem = document.createElement('div');
+          connectionItem.className = 'connection-item';
+          connectionItem.innerHTML = `
+            <div class="connection-info">
+              <div class="connection-title">Screen: ${screenId}</div>
+              <div class="connection-details">Connected to: ${dataId}</div>
+            </div>
+            <div style="display: flex; align-items: center;">
+              <span class="connection-status status-connected">Connected</span>
+              <button class="btn btn-danger" onclick="disconnectScreen('${screenId}')">Disconnect</button>
+            </div>
+          `;
+          connectionsList.appendChild(connectionItem);
+        }
       });
 
-      container.innerHTML = '';
-      container.appendChild(connectionsGrid);
+      if (connectionsList.children.length === 0) {
+        container.innerHTML = '<div class="no-connections">No active connections found</div>';
+      } else {
+        container.innerHTML = '';
+        container.appendChild(connectionsList);
+      }
     }
 
-    function createConnectionCard(screenId, dataId) {
-      const card = document.createElement('div');
-      const isConnected = dataId && dataId !== 'null';
-      card.className = `connection-card ${isConnected ? 'connected' : 'disconnected'}`;
+    function updateStats(connections) {
+      const totalConnections = Object.entries(connections).filter(([screenId, dataId]) => dataId && dataId !== 'null').length;
+      const activeScreens = Object.keys(connections).length;
+      const connectedDataSources = new Set(Object.values(connections).filter(dataId => dataId && dataId !== 'null')).size;
 
-      card.innerHTML = `
-                <div class="card-header">
-                    <span class="screen-id">Screen: ${screenId}</span>
-                    <span class="status ${isConnected ? 'connected' : 'disconnected'}">
-                        ${isConnected ? 'Connected' : 'Disconnected'}
-                    </span>
-                </div>
-                <div class="data-id">
-                    Data Source: ${isConnected ? dataId : 'None'}
-                </div>
-                <div class="action-buttons">
-                    ${isConnected ?
-          `<button class="btn btn-small btn-danger" onclick="disconnectScreen('${screenId}')">Disconnect</button>` :
-          `<button class="btn btn-small btn-success" onclick="connectScreen('${screenId}')">Connect</button>`
-        }
-                    <button class="btn btn-small" onclick="viewScreen('${screenId}')">View Screen</button>
-                </div>
-            `;
-
-      return card;
+      document.getElementById('totalConnections').textContent = totalConnections;
+      document.getElementById('activeScreens').textContent = activeScreens;
+      document.getElementById('connectedDataSources').textContent = connectedDataSources;
     }
 
     async function createConnection() {
-      const screenId = document.getElementById('screenId').value.trim();
-      const dataId = document.getElementById('dataId').value;
+      const screenSelect = document.getElementById('screenSelect');
+      const dataSourceSelect = document.getElementById('dataSourceSelect');
 
-      if (!screenId) {
-        showError('Please enter a screen ID');
-        return;
+      const selectedScreen = screenSelect.value;
+      const selectedDataSource = dataSourceSelect.value;
+
+      if (!selectedScreen || selectedScreen === 'new') {
+        const screenName = prompt('Enter screen name:');
+        if (!screenName) return;
+
+        const screenId = 'screen_' + Date.now();
+        await createNewScreen(screenId, screenName);
+        screenSelect.value = screenId;
       }
 
-      if (!dataId) {
+      if (!selectedDataSource) {
         showError('Please select a data source');
         return;
       }
 
+      const screenId = selectedScreen === 'new' ? 'screen_' + Date.now() : selectedScreen;
+
       try {
-        const response = await fetch(`${API_BASE}/connect?screenId=${screenId}&dataId=${dataId}`);
+        const response = await fetch(`${API_BASE}/connect?screenId=${screenId}&dataId=${selectedDataSource}`);
         const result = await response.json();
 
         if (response.ok) {
-          showSuccess(`Connection created successfully! Screen ${screenId} is now connected to ${dataId}`);
-          document.getElementById('screenId').value = '';
-          document.getElementById('dataId').value = '';
-          loadConnections();
+          showSuccess(`Connection created successfully!`);
+          screenSelect.value = '';
+          dataSourceSelect.value = '';
+          loadScreens();
         } else {
           showError(result.error || 'Failed to create connection');
         }
       } catch (error) {
         showError('Failed to create connection: ' + error.message);
+      }
+    }
+
+    async function createNewScreen(screenId, screenName) {
+      // Open new window with the screen
+      const screenUrl = `/data.html?screenId=${screenId}&name=${encodeURIComponent(screenName)}`;
+      const newWindow = window.open(screenUrl, '_blank', 'width=800,height=600');
+
+      if (newWindow) {
+        showSuccess(`Screen "${screenName}" created successfully!`);
+      } else {
+        showError('Failed to open screen window. Please allow popups.');
       }
     }
 
@@ -375,35 +490,12 @@
 
         if (response.ok) {
           showSuccess(`Screen ${screenId} disconnected successfully`);
-          loadConnections();
         } else {
           showError(result.error || 'Failed to disconnect screen');
         }
       } catch (error) {
         showError('Failed to disconnect screen: ' + error.message);
       }
-    }
-
-    async function connectScreen(screenId) {
-      // For simplicity, we'll connect to d1 by default
-      // In a real app, you might want a modal to select the data source
-      try {
-        const response = await fetch(`${API_BASE}/connect?screenId=${screenId}&dataId=d1`);
-        const result = await response.json();
-
-        if (response.ok) {
-          showSuccess(`Screen ${screenId} connected to d1 successfully`);
-          loadConnections();
-        } else {
-          showError(result.error || 'Failed to connect screen');
-        }
-      } catch (error) {
-        showError('Failed to connect screen: ' + error.message);
-      }
-    }
-
-    function viewScreen(screenId) {
-      window.open(`/?screenId=${screenId}`, '_blank');
     }
 
     function showError(message) {
