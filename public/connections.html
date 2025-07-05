@@ -368,10 +368,11 @@
         screenSelect.innerHTML = '<option value="">Select a screen...</option>';
 
         // Add existing screens
-        Object.keys(connections).forEach(screenId => {
+        Object.entries(connections).forEach(([screenId, screenInfo]) => {
           const option = document.createElement('option');
           option.value = screenId;
-          option.textContent = `Screen: ${screenId}`;
+          const displayName = screenInfo.name || `Screen ${screenId}`;
+          option.textContent = displayName;
           screenSelect.appendChild(option);
         });
 
@@ -395,14 +396,15 @@
 
       const connectionsList = document.createElement('div');
 
-      Object.entries(connections).forEach(([screenId, dataId]) => {
-        if (dataId && dataId !== 'null') {
+      Object.entries(connections).forEach(([screenId, screenInfo]) => {
+        if (screenInfo.dataId && screenInfo.dataId !== 'null') {
           const connectionItem = document.createElement('div');
           connectionItem.className = 'connection-item';
+          const displayName = screenInfo.name || `Screen ${screenId}`;
           connectionItem.innerHTML = `
             <div class="connection-info">
-              <div class="connection-title">Screen: ${screenId}</div>
-              <div class="connection-details">Connected to: ${dataId}</div>
+              <div class="connection-title">${displayName}</div>
+              <div class="connection-details">ID: ${screenId} | Connected to: ${screenInfo.dataId}</div>
             </div>
             <div style="display: flex; align-items: center;">
               <span class="connection-status status-connected">Connected</span>
@@ -422,9 +424,9 @@
     }
 
     function updateStats(connections) {
-      const totalConnections = Object.entries(connections).filter(([screenId, dataId]) => dataId && dataId !== 'null').length;
+      const totalConnections = Object.entries(connections).filter(([screenId, screenInfo]) => screenInfo.dataId && screenInfo.dataId !== 'null').length;
       const activeScreens = Object.keys(connections).length;
-      const connectedDataSources = new Set(Object.values(connections).filter(dataId => dataId && dataId !== 'null')).size;
+      const connectedDataSources = new Set(Object.values(connections).map(screenInfo => screenInfo.dataId).filter(dataId => dataId && dataId !== 'null')).size;
 
       document.getElementById('totalConnections').textContent = totalConnections;
       document.getElementById('activeScreens').textContent = activeScreens;
@@ -438,13 +440,20 @@
       const selectedScreen = screenSelect.value;
       const selectedDataSource = dataSourceSelect.value;
 
+      let screenId = selectedScreen;
+      let screenName = '';
+
       if (!selectedScreen || selectedScreen === 'new') {
-        const screenName = prompt('Enter screen name:');
+        screenName = prompt('Enter screen name:');
         if (!screenName) return;
 
-        const screenId = 'screen_' + Date.now();
+        screenId = 'screen_' + Date.now();
         await createNewScreen(screenId, screenName);
         screenSelect.value = screenId;
+      } else {
+        // Get screen name from the selected option
+        const selectedOption = screenSelect.options[screenSelect.selectedIndex];
+        screenName = selectedOption.textContent;
       }
 
       if (!selectedDataSource) {
@@ -452,10 +461,8 @@
         return;
       }
 
-      const screenId = selectedScreen === 'new' ? 'screen_' + Date.now() : selectedScreen;
-
       try {
-        const response = await fetch(`${API_BASE}/connect?screenId=${screenId}&dataId=${selectedDataSource}`);
+        const response = await fetch(`${API_BASE}/connect?screenId=${screenId}&dataId=${selectedDataSource}&name=${encodeURIComponent(screenName)}`);
         const result = await response.json();
 
         if (response.ok) {

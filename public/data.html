@@ -308,7 +308,9 @@
           document.getElementById('dataValue').textContent = data.data;
         } else {
           // Fetch data from screen
-          response = await fetch(`${API_BASE}/data?screenId=${screenId}`);
+          let url = `${API_BASE}/data?screenId=${screenId}`;
+          if (name) url += `&name=${encodeURIComponent(name)}`;
+          response = await fetch(url);
           data = await response.json();
 
           const statusElement = document.getElementById('connectionStatus');

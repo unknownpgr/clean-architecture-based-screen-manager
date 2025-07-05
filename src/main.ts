@@ -17,6 +17,7 @@ interface DataResponse {
 interface ScreenConnectionEntry {
   dataId: string | null;
   lastActive: number; // timestamp(ms)
+  name?: string; // screen name
 }
 
 type ScreenConnection = { [screenId: string]: ScreenConnectionEntry };
@@ -71,6 +72,7 @@ app.get("/data/:id", (req: Request, res: Response) => {
 
 app.get("/data", (req: Request, res: Response) => {
   const screenId: string | undefined = req.query.screenId as string;
+  const name: string | undefined = req.query.name as string;
   if (!screenId) {
     res.status(400).send({ error: "screenId is required" });
     return;
@@ -81,6 +83,11 @@ app.get("/data", (req: Request, res: Response) => {
     screenConnection[screenId] = { dataId: null, lastActive: Date.now() };
   } else {
     screenConnection[screenId].lastActive = Date.now();
+  }
+
+  // name이 오면 갱신
+  if (name) {
+    screenConnection[screenId].name = name;
   }
 
   const dataId: string | null = screenConnection[screenId].dataId;
@@ -104,10 +111,15 @@ app.get("/data", (req: Request, res: Response) => {
 });
 
 app.get("/connections", (req: Request, res: Response) => {
-  // dataId만 반환 (기존 FE 호환)
-  const result: { [screenId: string]: string | null } = {};
+  // 스크린 정보를 포함하여 반환
+  const result: {
+    [screenId: string]: { dataId: string | null; name?: string };
+  } = {};
   Object.entries(screenConnection).forEach(([screenId, entry]) => {
-    result[screenId] = entry.dataId;
+    result[screenId] = {
+      dataId: entry.dataId,
+      name: entry.name,
+    };
   });
   res.send(result);
 });
@@ -115,6 +127,7 @@ app.get("/connections", (req: Request, res: Response) => {
 app.get("/connect", (req: Request, res: Response) => {
   const screenId: string | undefined = req.query.screenId as string;
   const dataId: string | undefined = req.query.dataId as string;
+  const name: string | undefined = req.query.name as string;
 
   if (!screenId || !dataId) {
     res.status(400).send({ error: "screenId and dataId are required" });
@@ -125,6 +138,7 @@ app.get("/connect", (req: Request, res: Response) => {
   screenConnection[screenId] = {
     dataId: dataId === "null" ? null : dataId,
     lastActive: Date.now(),
+    name: name || undefined,
   };
   res.send({ data: "Connected" });
 });
