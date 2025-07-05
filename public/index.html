@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div>
+    <h1 id="name">Name</h1>
+    <h1 id="data">Data</h1>
+  </div>
+  <script>
+    const url = new URL(window.location.href);
+    const id = url.searchParams.get("id");
+    const screenId = url.searchParams.get("screenId");
+    const name = document.getElementById("name");
+    const dataTag = document.getElementById("data");
+    name.textContent = id;
+    dataTag.textContent = 0;
+
+    setInterval(() => {
+      if (id) {
+        fetch(`http://localhost:3000/data/${id}`)
+          .then((res) => res.json())
+          .then((data) => {
+            dataTag.textContent = data.data;
+          });
+      } else if (screenId) {
+        fetch(`http://localhost:3000/data?screenId=${screenId}`)
+          .then((res) => res.json())
+          .then((data) => {
+            dataTag.textContent = data.data;
+          });
+      }
+    }, 1000);
+  </script>
+</body>
+
+</html>
