@@ -311,9 +311,6 @@
               <label for="dataSourceSelect">Data Source:</label>
               <select id="dataSourceSelect">
                 <option value="">Select a data source...</option>
-                <option value="d1">Data Source 1 (d1)</option>
-                <option value="d2">Data Source 2 (d2)</option>
-                <option value="d3">Data Source 3 (d3)</option>
               </select>
             </div>
             <button class="btn" onclick="createConnection()">Connect</button>
@@ -345,6 +342,7 @@
     document.addEventListener('DOMContentLoaded', () => {
       loadConnections();
       loadScreens();
+      loadDataSources();
       setInterval(loadConnections, 1000); // 1초마다 폴링
     });
 
@@ -383,6 +381,25 @@
         screenSelect.appendChild(newOption);
       } catch (error) {
         console.error('Failed to load screens:', error);
+      }
+    }
+
+    async function loadDataSources() {
+      try {
+        const response = await fetch(`${API_BASE}/datasources`);
+        const dataSources = await response.json();
+
+        const dataSourceSelect = document.getElementById('dataSourceSelect');
+        dataSourceSelect.innerHTML = '<option value="">Select a data source...</option>';
+
+        dataSources.forEach(source => {
+          const option = document.createElement('option');
+          option.value = source.id;
+          option.textContent = `${source.name} (${source.id})`;
+          dataSourceSelect.appendChild(option);
+        });
+      } catch (error) {
+        console.error('Failed to load data sources:', error);
       }
     }
 

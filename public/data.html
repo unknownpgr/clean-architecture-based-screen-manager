@@ -247,42 +247,69 @@
     // Determine if this is a data source or screen
     if (id) {
       isDataSource = true;
-      setupDataSource(id);
+      setupDataSource(id).then(() => {
+        // Start polling for data only if we have valid parameters
+        if (id || screenId) {
+          setInterval(updateData, 1000);
+          setInterval(updateStats, 1000);
+
+          // Initial data load
+          updateData();
+          updateStats();
+        }
+      });
     } else if (screenId) {
       isDataSource = false;
       setupScreen(screenId, name);
+
+      // Start polling for data only if we have valid parameters
+      if (id || screenId) {
+        setInterval(updateData, 1000);
+        setInterval(updateStats, 1000);
+
+        // Initial data load
+        updateData();
+        updateStats();
+      }
     } else {
       showError('No id or screenId provided');
     }
 
-    // Start polling for data only if we have valid parameters
-    if (id || screenId) {
-      setInterval(updateData, 1000);
-      setInterval(updateStats, 1000);
 
-      // Initial data load
-      updateData();
-      updateStats();
-    }
 
-    function setupDataSource(dataId) {
-      const dataSources = {
-        'd1': { name: 'Data Source 1', icon: '📈', description: 'Primary data stream' },
-        'd2': { name: 'Data Source 2', icon: '📊', description: 'Secondary data stream' },
-        'd3': { name: 'Data Source 3', icon: '📉', description: 'Tertiary data stream' }
-      };
+    async function setupDataSource(dataId) {
+      try {
+        const response = await fetch(`${API_BASE}/datasources`);
+        const dataSources = await response.json();
 
-      const source = dataSources[dataId] || { name: `Data Source ${dataId}`, icon: '📊', description: 'Data stream' };
+        const source = dataSources.find(s => s.id === dataId) || {
+          name: `Data Source ${dataId}`,
+          icon: '📊',
+          description: 'Data stream'
+        };
 
-      document.title = `${source.name} - Data Source`;
-      document.getElementById('dataTitle').textContent = source.name;
-      document.getElementById('dataSubtitle').textContent = `ID: ${dataId}`;
-      document.getElementById('dataIcon').textContent = source.icon;
-      document.getElementById('dataDescription').textContent = source.description;
+        document.title = `${source.name} - Data Source`;
+        document.getElementById('dataTitle').textContent = source.name;
+        document.getElementById('dataSubtitle').textContent = `ID: ${dataId}`;
+        document.getElementById('dataIcon').textContent = source.icon;
+        document.getElementById('dataDescription').textContent = source.description;
 
-      const statusElement = document.getElementById('connectionStatus');
-      statusElement.className = 'connection-status status-data-source';
-      statusElement.innerHTML = '📊 Data Source';
+        const statusElement = document.getElementById('connectionStatus');
+        statusElement.className = 'connection-status status-data-source';
+        statusElement.innerHTML = '📊 Data Source';
+      } catch (error) {
+        console.error('Failed to load data source info:', error);
+        // Fallback to default values
+        document.title = `Data Source ${dataId} - Data Source`;
+        document.getElementById('dataTitle').textContent = `Data Source ${dataId}`;
+        document.getElementById('dataSubtitle').textContent = `ID: ${dataId}`;
+        document.getElementById('dataIcon').textContent = '📊';
+        document.getElementById('dataDescription').textContent = 'Data stream';
+
+        const statusElement = document.getElementById('connectionStatus');
+        statusElement.className = 'connection-status status-data-source';
+        statusElement.innerHTML = '📊 Data Source';
+      }
     }
 
     function setupScreen(screenId, screenName) {

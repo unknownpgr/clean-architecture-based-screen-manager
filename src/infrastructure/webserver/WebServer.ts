@@ -1,15 +1,18 @@
 import express, { Application } from "express";
 import { DataController } from "../controllers/DataController";
 import { ConnectionController } from "../controllers/ConnectionController";
+import { DataSourceController } from "../controllers/DataSourceController";
 import { createDataRoutes } from "../routes/dataRoutes";
 import { createConnectionRoutes } from "../routes/connectionRoutes";
+import { createDataSourceRoutes } from "../routes/dataSourceRoutes";
 
 export class WebServer {
   private app: Application;
 
   constructor(
     private dataController: DataController,
-    private connectionController: ConnectionController
+    private connectionController: ConnectionController,
+    private dataSourceController: DataSourceController
   ) {
     this.app = express();
     this.setupMiddleware();
@@ -28,6 +31,9 @@ export class WebServer {
 
     // 데이터 라우트
     this.app.use("/data", createDataRoutes(this.dataController));
+
+    // 데이터 소스 라우트
+    this.app.use("/", createDataSourceRoutes(this.dataSourceController));
 
     // 연결 라우트
     this.app.use("/", createConnectionRoutes(this.connectionController));

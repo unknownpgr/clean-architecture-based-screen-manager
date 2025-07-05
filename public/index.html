@@ -277,11 +277,9 @@
 
     async function loadDataSources() {
       try {
-        const dataSources = [
-          { id: 'd1', name: 'Data Source 1', icon: '📈' },
-          { id: 'd2', name: 'Data Source 2', icon: '📊' },
-          { id: 'd3', name: 'Data Source 3', icon: '📉' }
-        ];
+        // API에서 데이터 소스 목록 가져오기
+        const response = await fetch(`${API_BASE}/datasources`);
+        const dataSources = await response.json();
 
         const container = document.getElementById('dataSourcesContainer');
         const grid = document.createElement('div');
@@ -289,8 +287,8 @@
 
         for (const source of dataSources) {
           try {
-            const response = await fetch(`${API_BASE}/data/${source.id}`);
-            const data = await response.json();
+            const dataResponse = await fetch(`${API_BASE}/data/${source.id}`);
+            const data = await dataResponse.json();
 
             const card = document.createElement('div');
             card.className = 'data-source-card';
